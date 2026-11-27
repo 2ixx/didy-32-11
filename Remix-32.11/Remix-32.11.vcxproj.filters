@@ -1200,6 +1200,7 @@
     <ClInclude Include="SDK\SDK\VictoryCrownsRuntime_classes.hpp">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="ProcessEventHook.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -1559,5 +1560,6 @@
     <ClCompile Include="SDK\SDK\VictoryCrownsRuntime_functions.cpp">
       <Filter>SDK</Filter>
     </ClCompile>
+    <ClCompile Include="ProcessEventHook.cpp" />
   </ItemGroup>
 </Project>

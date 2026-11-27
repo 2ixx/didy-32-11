@@ -10,7 +10,8 @@ void Main()
     freopen_s(&Stream, "CONOUT$", "w", stdout);
     freopen_s(&Stream, "CONOUT$", "w+", stderr);
     freopen_s(&Stream, "CONIN$", "r", stdin);
-
+    printf("[DEBUG] Main() started\n");
+    fflush(stdout);
     static auto GetGameCommandLine = (wchar_t* (*)())(ImageBase + 0x1AE85B0);
     static auto Strncat = (wchar_t* (*)(wchar_t*, const wchar_t*, int32))(ImageBase + 0x29866B8);
 
@@ -36,7 +37,7 @@ void Main()
         }
     }
 
-    SetConsoleTitleA("Remix 32.11 | Setting up");
+    SetConsoleTitleA("Didy 32.11 | Setting up");
 
     Patch<uint8_t>(ImageBase + 0xA0E8124, 0xC3);
     Patch<uint8_t>(ImageBase + 0x403B258, 0xC3);

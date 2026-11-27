@@ -13,6 +13,7 @@
 #include "FortniteGame/Source/FortniteGame/Public/FortGameModeZone.h"
 #include "FortniteGame/Source/FortniteGame/Public/FortKismetLibrary.h"
 #include "FortniteGame/Source/FortniteGame/Public/Quests/FortQuestManager.h"
+#include "ProcessEventHook.h"
 
 INIT_MODULE(AFortGameModeAthena);
 INIT_POSTLOAD(AFortGameModeAthena);
@@ -1088,6 +1089,7 @@ void AFortGameModeAthena__Init()
 
 void AFortGameModeAthena__PostLoad()
 {
+    PumpkinProjectile::Install(); 
     ExecHook(AGameModeBase::StaticClass()->FindFunction("SpawnDefaultPawnFor"), SpawnDefaultPawnFor);
     Patch<uint16_t>(ImageBase + 0x6EDBF44, 0x9090);
     ExecHook(AGameModeBase::StaticClass()->FindFunction("HandleStartingNewPlayer"), HandleStartingNewPlayer, HandleStartingNewPlayerOG);

@@ -716,7 +716,7 @@ void PlaceLateGamePawn(AController* Controller, AFortPawn* Pawn)
     Pawn->SetShield(100.f);
     Pawn->K2_SetActorLocation(Aircraft->K2_GetActorLocation() + FVector(UKismetMathLibrary::DegCos(Angle) * Distance, UKismetMathLibrary::DegSin(Angle) * Distance, 0.), false, nullptr, true);
 }
-
+void StartAircraftPhase(UFortGameStateComponent_BattleRoyaleGamePhaseLogic* GamePhaseLogic);
 static void ServerCheat(AFortPlayerController* _this, FString Msg)
 {
     if (!_this)
@@ -963,6 +963,37 @@ static void ServerCheat(AFortPlayerController* _this, FString Msg)
 
         _this->ClientMessage(FString(L"Launched player!"), FName(), 1.f);
     }
+    else if (command == "botdebug")
+    {
+        if (!_this->CheatManager)
+        {
+            UClass* CheatClass = _this->CheatClass.Get();
+            if (!CheatClass)
+                CheatClass = UFortCheatManager::StaticClass();
+        }
+
+        auto CheatManager = (UFortCheatManager*)_this->CheatManager;
+
+        UKismetSystemLibrary::ExecuteConsoleCommand(UWorld::GetWorld(), FString(L"Phoebe.Minimap 1"), _this);
+
+        if (CheatManager)
+            CheatManager->BotToggleDebugMiniMap();
+
+        _this->ClientMessage(FString(CheatManager ? L"Bot debug minimap toggled." : L"Could not create cheat manager."), FName(L"System"), 5.f);
+    }
+    else if (command == "startaircraft")
+    {
+        auto GamePhaseLogic = UFortGameStateComponent_BattleRoyaleGamePhaseLogic::Get(_this);
+
+        if (!GamePhaseLogic)
+        {
+            _this->ClientMessage(FString(L"Game phase logic not found."), FName(), 1.f);
+            return;
+        }
+
+        StartAircraftPhase(GamePhaseLogic);
+        _this->ClientMessage(FString(L"Started the aircraft phase."), FName(), 1.f);
+        }
 }
 
 void AFortPlayerControllerAthena__PostLoad()

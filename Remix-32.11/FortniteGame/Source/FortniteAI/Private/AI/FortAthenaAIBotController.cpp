@@ -376,6 +376,16 @@ static bool RestartBot(AFortAthenaAIBotController* Controller, AActor* StartSpot
 {
     auto bRestarted = RestartBotOG(Controller, StartSpot, Location);
 
+    if (bRestarted)
+    {
+        auto World = UWorld::GetWorld();
+        auto GameState = World ? (AFortGameStateAthena*)World->GameState : nullptr;
+        auto Service = GameState ? UAthenaAIBlueprintLibrary::GetAIServicePlayerBots(GameState) : nullptr;
+
+        if (Service)
+            Controller->DebugMinimapData = Service->DebugMinimapData;
+    }
+
     if (bRestarted && IsLateGameBot(Controller))
     {
         PlaceLateGamePawn(Controller, Controller->PlayerBotPawn);
@@ -534,8 +544,12 @@ static void RefreshBotMinimap()
     auto GameState = World ? (AFortGameStateAthena*)World->GameState : nullptr;
     auto Service = GameState ? UAthenaAIBlueprintLibrary::GetAIServicePlayerBots(GameState) : nullptr;
 
+    printf("[Minimap] tick: world=%p gamestate=%p service=%p\n", World, GameState, Service);
+
     if (!Service)
         return;
+
+    printf("[Minimap] PlayerBots=%d\n", Service->PlayerBots.Num());
 
     auto& DebugData = Service->DebugMinimapData;
     DebugData.bIsOverridden = true;
@@ -544,7 +558,8 @@ static void RefreshBotMinimap()
     DebugData.DebugMinimapIconScale.X = 0.5;
     DebugData.DebugMinimapIconScale.Y = 0.5;
 
-    static auto* Icon = FindObject<UTexture2D>(L"/Game/Athena/HUD/Spectator/DeimosRiftMapIcon.DeimosRiftMapIcon");
+    auto* Icon = FindObject<UTexture2D>(L"/Game/Athena/HUD/Spectator/DeimosRiftMapIcon.DeimosRiftMapIcon");
+    printf("[Minimap] icon=%p\n", Icon);
     if (Icon)
         DebugData.DebugMinimapIconBrush.ResourceObject = Icon;
 
@@ -554,7 +569,20 @@ static void RefreshBotMinimap()
             BotInfo.BotController->DebugMinimapData = Service->DebugMinimapData;
     }
 
-    EnableBotDebugFlag();
+    auto GameMode = World ? (AFortGameModeAthena*)World->AuthorityGameMode : nullptr;
+    printf("[Minimap] AliveBots=%d\n", GameMode ? GameMode->AliveBots.Num() : -1);
+
+    if (GameMode)
+    {
+        for (auto& Bot : GameMode->AliveBots)
+        {
+            if (Bot)
+                Bot->DebugMinimapData = Service->DebugMinimapData;
+        }
+    }
+
+    bool bFlag = EnableBotDebugFlag();
+    printf("[Minimap] flag set=%d\n", bFlag);
     UKismetSystemLibrary::ExecuteConsoleCommand(World, FString(L"Phoebe.Minimap 1"), nullptr);
 }
 void AFortAthenaAIBotController__Tick()

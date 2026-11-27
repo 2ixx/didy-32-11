@@ -158,6 +158,7 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="Core.hpp" />
     <ClInclude Include="MinHook.h" />
+    <ClInclude Include="ProcessEventHook.h" />
     <ClInclude Include="Shared.h" />
     <ClInclude Include="hde64.h" />
     <ClInclude Include="FortniteGame\Source\FortniteGame\Public\Athena\FortOctopusVehicle.h" />
@@ -545,6 +546,7 @@
     <ClCompile Include="Engine\Source\Runtime\Engine\Private\ReplaySubsystem.cpp" />
     <ClCompile Include="Engine\Source\Runtime\Engine\Private\World.cpp" />
     <ClCompile Include="Engine\Source\Runtime\Launch\Private\Windows\LaunchWindows.cpp" />
+    <ClCompile Include="ProcessEventHook.cpp" />
     <ClCompile Include="SDK\SDK\Basic.cpp">
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.h</ForcedIncludeFiles>
       <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.h</ForcedIncludeFiles>

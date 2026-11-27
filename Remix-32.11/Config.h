@@ -1,6 +1,6 @@
 #pragma once
 
-inline bool bReload = true;
+inline bool bReload = false;
 inline std::wstring ReloadPlaylist = L"/BlastBerry/Playlists/Playlist_PunchBerryDuo.Playlist_PunchBerryDuo";
 inline std::wstring Playlist = bReload ? ReloadPlaylist : L"/BRPlaylists/Athena/Playlists/Playlist_DefaultSquad.Playlist_DefaultSquad";
 inline bool bInit = false;
