@@ -1163,10 +1163,18 @@ namespace
                 Attach.Call();
             }
 
-            FCall Hide(Root, "SetVisibility");
-            Hide.Set("bNewVisibility", false);
-            Hide.Set("bPropagateToChildren", true);
-            Hide.Call();
+            // The pumpkin rocket is only the hitbox: hide it, and leave the original projectile visible.
+            FCall HideActor(Spawned, "SetActorHiddenInGame");
+            HideActor.Set("bNewHidden", true);
+            HideActor.Call();
+
+            if (SpawnedRoot)
+            {
+                FCall Hide(SpawnedRoot, "SetVisibility");
+                Hide.Set("bNewVisibility", false);
+                Hide.Set("bPropagateToChildren", true);
+                Hide.Call();
+            }
         }
 
         FCall EnableCollision(Spawned, "SetActorEnableCollision");
